@@ -1,4 +1,4 @@
-package telran.collections.tests;
+package telran.util.tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
