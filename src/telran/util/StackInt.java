@@ -8,6 +8,7 @@ public class StackInt {
 	ArrayList<Integer> StackArray = new ArrayList<>();
 	private int maxNumber;
 	
+	
 	public int pop() {
 		if (this.isEmpty()) {
 			throw new NoSuchElementException ("Stack is empty");
