@@ -1,49 +1,65 @@
 package telran.collections.tests;
 
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
+
+import java.util.Arrays;
+import java.util.HashSet;
+
 import org.junit.jupiter.api.Test;
 
 class ArrayTests {
 
-	@BeforeEach
-	void setUp() throws Exception {
-	}
-
 	@Test
-	void half() {
-		int[] ararWithHalfSum = { 40, -20, 50, 10, 20 }; // sum = 100, 40 + 10 = 50
-		int[] ararWithNoHalfSum = { 40, -20, 50, 5, 25 }; // sum = 100, no two numbers with sum = 50
-		assertTrue(isHalfSumTwoNumbers(ararWithHalfSum));
-		assertTrue(isHalfSumTwoNumbers(ararWithNoHalfSum));
+	void halfSum() {
+		int arWithHalfSum[] = {40, -20, 50, 10, 20}; //sum = 100, 40 + 10 = 50
+		int arWithNoHalfSum[] = {40, -20, 50, 5, 25}; //sum = 100 , no two numbers with sum = 50
+		assertTrue(isHalfSumTwoNumbers(arWithHalfSum));
+		assertFalse(isHalfSumTwoNumbers(arWithNoHalfSum));
 	}
-
-	/**
-	 * @param ararWithNoHalfSum with no limitations at all
-	 * @return true if there are two numbers with sum equals half of total suu of
-	 *         array
-	 */
-	private boolean isHalfSumTwoNumbers(int[] ararWithNoHalfSum) {
-		// TODO Auto-generated method stub
+/**
+ * 
+ * @param array with no limitations of the number values
+ * @return true if there are two numbers with sum equaled 
+ * half of total sum of a given array
+ */
+	private boolean isHalfSumTwoNumbers(int[] array) {
+		int halfSum = Arrays.stream(array).sum() / 2;
+		HashSet<Integer> setHelper = new HashSet<>();
+		for(int num: array) {
+			if (setHelper.contains(halfSum - num)) {
+				return true;
+			}
+			setHelper.add(num);
+		}
+		
 		return false;
 	}
-
+	
 	@Test
 	void valueWithMaxNegativeTest() {
-		int[] arWithNegative = { 10, 2000000000, 2, 4, 40, -4, 10, -20000000, -2 };	// 20 -> -20 => true
-		int[] arWithNoNegative = { 10, 20, 2000000000, 4, 40, -14, 10, -2000000001, -3 };	// there no pair => true
-		
-		assertEquals(20, valueWithMaxNegative(arWithNegative));
+		int arWithNegative[] = {10, 20000000, 2, 4, 40, -4, 10, -20000000, -2};
+		int arWithNoNegative[] = {10, 20, 2, 4, 40, -14, 10, -21, -3};
+		assertEquals(20000000, valueWithMaxNegative(arWithNegative));
 		assertEquals(-1, valueWithMaxNegative(arWithNoNegative));
-
 	}
-
 	/**
-	 * @param arWithNegative
-	 * @return maximal value with existing negative image
+	 * 
+	 * @param array with numbers that may have the huge values
+	 * @return maximal value with existing negative image (negative value with same absolute value)
+	 * if no value with its negative image the function returns -1
 	 */
-	private Integer valueWithMaxNegative(int[] arWithNegative) {
-		// TODO Auto-generated method stub
-		return -1;
+	private Integer valueWithMaxNegative(int[] array) {
+		int res = -1;
+		HashSet<Integer> setHelper = new HashSet<>();
+		for (int num: array) {
+			int absNum = Math.abs(num);
+			if (setHelper.contains(-num) && absNum > res) {
+				res = absNum;
+			}
+			setHelper.add(num);
+		}
+		
+		return res;
 	}
+
 }
