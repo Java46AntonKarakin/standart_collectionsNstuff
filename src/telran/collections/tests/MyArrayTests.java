@@ -22,6 +22,7 @@ class MyArrayTests {
 		assertFalse(containsOnlyValue(array, commonValue));
 		array.setAll(commonValue);
 		assertTrue(containsOnlyValue(array, commonValue));
+		
 	}
 
 	private boolean containsOnlyValue(MyArray<String> array, String commonValue) {
@@ -48,7 +49,10 @@ class MyArrayTests {
 			array.set(i, commonValue);
 			assertTrue(array.get(i).equals(commonValue));
 			assertFalse(array.get(i).equals(volumes[i]));
+			
 		}
+		assertThrows(IndexOutOfBoundsException.class, () -> array.set(volumes.length+1, commonValue));
+		assertThrows(IndexOutOfBoundsException.class, () -> array.set(-1, commonValue));
 	}
 
 }

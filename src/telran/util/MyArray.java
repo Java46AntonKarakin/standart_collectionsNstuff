@@ -28,7 +28,7 @@ public class MyArray<T> {
 	 * @param value
 	 */
 	public void setAll(T value) {
-		IntStream.rangeClosed(0, mapValues.size()).forEach(x -> mapValues.put(x, value));
+		IntStream.rangeClosed(0, mapValues.size()).forEach(x -> mapValues.replace(x, value));
 	}
 
 	/**
@@ -39,6 +39,9 @@ public class MyArray<T> {
 	 * @param value
 	 */
 	public void set(int index, T value) {
+		if (index < 0 || index > listEntrys.size()-1) {
+			throw new IndexOutOfBoundsException();
+		}
 		var entry = listEntrys.get(index);
 		entry.setValue(value);
 	}
