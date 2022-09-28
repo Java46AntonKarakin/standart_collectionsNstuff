@@ -1,12 +1,15 @@
 package telran.collections.tests;
 
 import telran.util.MyArray;
+import telran.util.MyArray_2;
+
 import java.util.Arrays;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MyArrayTests {
-	MyArray<String> array = new MyArray<>(6);
+	MyArray_2<String> array = new MyArray_2<>(6);
+//	MyArray<String> array = new MyArray<>(6);
 	String[] volumes = { "cat", "kitten", "dog", "puppy", "hamster", "parrot", "New Guinea" };
 	String commonValue = "egg";
 
@@ -25,7 +28,7 @@ class MyArrayTests {
 		
 	}
 
-	private boolean containsOnlyValue(MyArray<String> array, String commonValue) {
+	private boolean containsOnlyValue(MyArray_2<String> array, String commonValue) {
 		for (int i = 0; i < volumes.length; i++) {
 			if (array.get(i) != commonValue) {
 				return false;
@@ -49,10 +52,14 @@ class MyArrayTests {
 			array.set(i, commonValue);
 			assertTrue(array.get(i).equals(commonValue));
 			assertFalse(array.get(i).equals(volumes[i]));
-			
 		}
 		assertThrows(IndexOutOfBoundsException.class, () -> array.set(volumes.length+1, commonValue));
 		assertThrows(IndexOutOfBoundsException.class, () -> array.set(-1, commonValue));
+		array.setAll("abc");
+		for (int i = 0; i < volumes.length; i++) {
+			assertTrue(array.get(i).equals("abc"));
+		}
+		
 	}
 
 }
