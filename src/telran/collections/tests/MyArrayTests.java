@@ -16,8 +16,9 @@ class MyArrayTests {
 	@BeforeEach
 	void setUp() {
 		int[] index = { 0 };
-		Arrays.stream(volumes)
-		.forEach(x -> {	array.set(index[0]++, x);});
+		Arrays.stream(volumes).forEach(x -> {
+			array.set(index[0]++, x);
+		});
 	}
 
 	@Test
@@ -25,7 +26,7 @@ class MyArrayTests {
 		assertFalse(containsOnlyValue(array, commonValue));
 		array.setAll(commonValue);
 		assertTrue(containsOnlyValue(array, commonValue));
-		
+
 	}
 
 	private boolean containsOnlyValue(MyArray_2<String> array, String commonValue) {
@@ -46,20 +47,21 @@ class MyArrayTests {
 
 	@Test
 	void testSet() {
-		for (int i = 0; i < volumes.length; i++) {
-			assertFalse(array.get(i).equals(commonValue));
-			assertTrue(array.get(i).equals(volumes[i]));
-			array.set(i, commonValue);
-			assertTrue(array.get(i).equals(commonValue));
-			assertFalse(array.get(i).equals(volumes[i]));
-		}
-		assertThrows(IndexOutOfBoundsException.class, () -> array.set(volumes.length+1, commonValue));
+		assertFalse(array.get(0).equals(commonValue));
+		assertTrue(array.get(0).equals(volumes[0]));
+		array.set(0, commonValue);
+		System.out.println("array.get(0) = " + array.get(0));
+		System.out.println("commonValue = " + commonValue);
+		assertTrue(array.get(0).equals(commonValue));
+		assertFalse(array.get(0).equals(volumes[0]));
+
+		assertThrows(IndexOutOfBoundsException.class, () -> array.set(volumes.length + 1, commonValue));
 		assertThrows(IndexOutOfBoundsException.class, () -> array.set(-1, commonValue));
 		array.setAll("abc");
 		for (int i = 0; i < volumes.length; i++) {
 			assertTrue(array.get(i).equals("abc"));
 		}
-		
+
 	}
 
 }

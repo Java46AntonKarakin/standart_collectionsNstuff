@@ -24,12 +24,10 @@ class MapTests {
 		Map<String, Integer> mapOccurrences = getMapOccurrences(strings);
 		List<Entry<String, Integer>> sortedListOccurrences = getSortedList(mapOccurrences);
 		displayListOccurrences(sortedListOccurrences);
-		
 	}
 
 	private void displayListOccurrences(List<Entry<String, Integer>> list) {
 		list.forEach(e -> System.out.printf("%s => %d\n", e.getKey(), e.getValue()));
-		
 	}
 
 	private List<Entry<String, Integer>> getSortedList(Map<String, Integer> mapOccurrences) {

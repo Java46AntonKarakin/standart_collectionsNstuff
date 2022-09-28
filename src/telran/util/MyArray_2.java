@@ -31,7 +31,7 @@ public class MyArray_2<T> {
 
 	public T get(int index) {
 		var res = arrayOfValues.get(index);
-		if (flSetAll && arrayOfValues.get(index) == null) {
+		if (flSetAll && nodesMap.get(index) == null) {
 			res = commonValue;
 		}
 		return res;
