@@ -8,7 +8,7 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MyArrayTests {
-	MyArray_2<String> array = new MyArray_2<>(6);
+	MyArray_2<String> array = new MyArray_2<>(7);
 //	MyArray<String> array = new MyArray<>(6);
 	String[] volumes = { "cat", "kitten", "dog", "puppy", "hamster", "parrot", "New Guinea" };
 	String commonValue = "egg";
@@ -41,6 +41,7 @@ class MyArrayTests {
 	@Test
 	void testGet() {
 		for (int i = 0; i < volumes.length; i++) {
+			System.out.println(array.get(i));
 			assertEquals(array.get(i), volumes[i]);
 		}
 	}
