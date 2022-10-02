@@ -10,9 +10,9 @@ class AnagramTests {
 	@Test
 	void testAnagramTrue() {
 		assertTrue(isAnagram(word, "loweyl"));
-//		assertTrue(isAnagram(word, "elolyw"));
-//		assertTrue(isAnagram(word, "wolley"));
-//		assertTrue(isAnagram(word, "loleyw"));
+		assertTrue(isAnagram(word, "elolyw"));
+		assertTrue(isAnagram(word, "wolley"));
+		assertTrue(isAnagram(word, "loleyw"));
 		
 	}
 	@Test

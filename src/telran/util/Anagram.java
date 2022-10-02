@@ -30,7 +30,7 @@ public class Anagram {
 		.mapToObj(i -> (char) i)
 		.forEach(x -> {
 			wordMap.merge(x, -1, (x1, x2) -> {
-				return x2 == 1 ? null : x2 - 1;
+				return x1 == 1 ? null : x1 - 1;
 			});
 		});
 
