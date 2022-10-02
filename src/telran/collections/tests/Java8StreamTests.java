@@ -101,8 +101,9 @@ public class Java8StreamTests {
 		.peek(x -> {
 			if ((int)x.getKey() == 0) zero[0] = x;
 		})
+		.filter(x -> (int)x.getKey() != 0)
 		.forEach(x -> {
-			if ((int)x.getKey() != 0)System.out.printf("%d: <%d>\n", x.getKey(), x.getValue());
+			System.out.printf("%d: <%d>\n", x.getKey(), x.getValue());
 		});
 		
 		System.out.printf("%d: <%d>\n", ((Entry) zero[0]).getKey(), ((Entry) zero[0]).getValue());
