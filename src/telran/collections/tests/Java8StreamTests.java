@@ -89,7 +89,7 @@ public class Java8StreamTests {
 
 	private void printDigits(int elements, int minValue, int maxValue) {
 		
-		Object [] zero  = new Object [1];
+		int [] zero = new int [2];
 		
 		new Random()
 		.ints(elements, minValue, maxValue)
@@ -99,31 +99,14 @@ public class Java8StreamTests {
 		.entrySet()
 		.stream()
 		.peek(x -> {
-			if ((int)x.getKey() == 0) zero[0] = x;
+			if ((int)x.getKey() == 0) {
+				zero[0] = (int)x.getKey(); 
+				zero[1] = (int)x.getValue();
+				};
 		})
 		.filter(x -> (int)x.getKey() != 0)
-		.forEach(x -> {
-			System.out.printf("%d: <%d>\n", x.getKey(), x.getValue());
-		});
+		.forEach(x -> System.out.printf("%d: <%d>\n", x.getKey(), x.getValue()));
 		
-		System.out.printf("%d: <%d>\n", ((Entry) zero[0]).getKey(), ((Entry) zero[0]).getValue());
-		
-		
-//		Map<Integer, Integer> res = new Random()
-//				.ints(elements, minValue, maxValue)
-//				.flatMap(x -> String.valueOf(x).chars()) 
-//				.map(x -> Character.valueOf((char)(x-'0')))
-//				.collect(HashMap::new, (a, b) -> a.put(b, a.getOrDefault(b, 0) + 1), (a, b) -> a.putAll(b));
-//		printMapOfDigits(res);
-	}
-
-	private void printMapOfDigits(Map<Integer, Integer> res) {
-		res.forEach((a,b) -> {
-			if (a != 0) {
-				System.out.printf("%d: <%d>\n", a, b);
-			}
-		});
-		System.out.printf("0: <%d>\n", res.get(0));
-		
+		System.out.printf("%d: <%d>\n", zero[0], zero[1]);
 	}
 }
