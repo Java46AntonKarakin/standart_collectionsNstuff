@@ -1,68 +1,46 @@
 package telran.collections.tests;
 
-import telran.util.MyArray;
-import telran.util.MyArray_2;
-
-import java.util.Arrays;
-import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import telran.util.MyArray;
+
 class MyArrayTests {
-	MyArray_2<String> array = new MyArray_2<>(7);
-//	MyArray<String> array = new MyArray<>(6);
-	String[] volumes = { "cat", "kitten", "dog", "puppy", "hamster", "parrot", "New Guinea" };
-	String commonValue = "egg";
 
-	@BeforeEach
-	void setUp() {
-		int[] index = { 0 };
-		Arrays.stream(volumes).forEach(x -> {
-			array.set(index[0]++, x);
-		});
-	}
+	private static final int LENGTH = 1000;
+	private static final int VALUE = 10;
+	private static final int OTHER_VALUE = 5;
+	MyArray<Integer> array;
+		@BeforeEach
+		void setUp() throws Exception {
+			array = new MyArray<>(LENGTH);
+			array.setAll(VALUE);
+		}
 
-	@Test
-	void testSetAll() {
-		assertFalse(containsOnlyValue(array, commonValue));
-		array.setAll(commonValue);
-		assertTrue(containsOnlyValue(array, commonValue));
-
-	}
-
-	private boolean containsOnlyValue(MyArray_2<String> array, String commonValue) {
-		for (int i = 0; i < volumes.length; i++) {
-			if (array.get(i) != commonValue) {
-				return false;
+		@Test
+		void testSetAll() {
+			for (int i = 0; i < LENGTH; i++) {
+				assertEquals(VALUE, array.get(i));
 			}
 		}
-		return true;
-	}
 
-	@Test
-	void testGet() {
-		for (int i = 0; i < volumes.length; i++) {
-			System.out.println(array.get(i));
-			assertEquals(array.get(i), volumes[i]);
+		@Test
+		void testSetGet() {
+			array.set(0, OTHER_VALUE);
+			array.set(LENGTH - 1, OTHER_VALUE);
+			int limit = LENGTH - 1;
+			for(int i = 1; i < limit; i++) {
+				assertEquals(VALUE, array.get(i));
+			}
+			assertEquals(OTHER_VALUE, array.get(0));
+			assertEquals(OTHER_VALUE, array.get(limit));
+			array.setAll(OTHER_VALUE);
+			for(int i = 0; i < LENGTH; i++) {
+				assertEquals(OTHER_VALUE, array.get(i));
+			}
+			
 		}
-	}
-
-	@Test
-	void testSet() {
-		assertFalse(array.get(0).equals(commonValue));
-		assertTrue(array.get(0).equals(volumes[0]));
-		array.set(0, commonValue);
-		System.out.println("array.get(0) = " + array.get(0));
-		System.out.println("commonValue = " + commonValue);
-		assertTrue(array.get(0).equals(commonValue));
-		assertFalse(array.get(0).equals(volumes[0]));
-
-		assertThrows(IndexOutOfBoundsException.class, () -> array.set(volumes.length + 1, commonValue));
-		assertThrows(IndexOutOfBoundsException.class, () -> array.set(-1, commonValue));
-		array.setAll("abc");
-		for (int i = 0; i < volumes.length; i++) {
-			assertTrue(array.get(i).equals("abc"));
-		}
-
-	}
 
 }

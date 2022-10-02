@@ -1,8 +1,9 @@
 package telran.util;
 
-import java.util.*;
+import java.util.HashMap;
 
 public class Anagram {
+
 	/**
 	 * 
 	 * @param word
@@ -13,24 +14,26 @@ public class Anagram {
 	 *         anagrams (yello, yelllw)
 	 */
 
+	// write the method by using the Java 8 Map methods merge and compute
 	public static boolean isAnagram(String word, String anagram) {
-		char[] first = word.toLowerCase().toCharArray();
-		char[] second = anagram.toLowerCase().toCharArray();
-		Arrays.sort(first);
-		Arrays.sort(second);
-		return Arrays.equals(first, second);
+		if (word.length() != anagram.length()) {
+			return false;
+		}
 		
-//		TreeMap<Character, Integer> first = StringToMap(word);
-//		TreeMap<Character, Integer> second = StringToMap(anagram);
-//		return first.equals(second);
-	}
-
-	private static TreeMap<Character, Integer> StringToMap(String str) {
-		TreeMap<Character, Integer> res = new TreeMap<>();
-		str.toLowerCase().chars().mapToObj(i -> (char) i).forEach(x -> {
-			Integer count = res.getOrDefault(x, 0);
-			res.put(x, count + 1);
+		HashMap<Character, Integer> wordMap = word.toLowerCase()
+				.chars()
+				.mapToObj(i -> (char) i)
+				.collect(HashMap::new,(a, b) -> a.put(b, a.getOrDefault(b, 0) + 1), (a, b) -> a.putAll(b));
+		
+		anagram.toLowerCase()
+		.chars()
+		.mapToObj(i -> (char) i)
+		.forEach(x -> {
+			wordMap.merge(x, -1, (x1, x2) -> {
+				return x2 == 1 ? null : x2 - 1;
+			});
 		});
-		return res;
+
+		return wordMap.isEmpty();
 	}
 }
