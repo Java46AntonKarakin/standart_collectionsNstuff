@@ -19,16 +19,11 @@ public class Anagram {
 		if (word.length() != anagram.length()) {
 			return false;
 		}
-		
-		HashMap<Character, Integer> wordMap = word.toLowerCase()
-				.chars()
-				.mapToObj(i -> (char) i)
-				.collect(HashMap::new,(a, b) -> a.put(b, a.getOrDefault(b, 0) + 1), (a, b) -> a.putAll(b));
-		
-		anagram.toLowerCase()
-		.chars()
-		.mapToObj(i -> (char) i)
-		.forEach(x -> {
+
+		HashMap<Character, Integer> wordMap = word.toLowerCase().chars().mapToObj(i -> (char) i).collect(HashMap::new,
+				(a, b) -> a.put(b, a.getOrDefault(b, 0) + 1), (a, b) -> a.putAll(b));
+
+		anagram.toLowerCase().chars().mapToObj(i -> (char) i).forEach(x -> {
 			wordMap.merge(x, -1, (x1, x2) -> {
 				return x1 == 1 ? null : x1 - 1;
 			});

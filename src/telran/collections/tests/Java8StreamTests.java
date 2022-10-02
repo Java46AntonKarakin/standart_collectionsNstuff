@@ -2,6 +2,7 @@ package telran.collections.tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.*;
 
@@ -87,12 +88,32 @@ public class Java8StreamTests {
 	}
 
 	private void printDigits(int elements, int minValue, int maxValue) {
-		Map<Integer, Integer> res = new Random()
-				.ints(elements, minValue, maxValue)
-				.flatMap(x -> String.valueOf(x).chars()) 
-				.map(x -> Character.valueOf((char)(x-'0')))
-				.collect(HashMap::new, (a, b) -> a.put(b, a.getOrDefault(b, 0) + 1), (a, b) -> a.putAll(b));
-		printMapOfDigits(res);
+		
+		Object [] zero  = new Object [1];
+		
+		new Random()
+		.ints(elements, minValue, maxValue)
+		.flatMap(x -> String.valueOf(x).chars()) 
+		.map(x -> Character.valueOf((char)(x-'0')))
+		.collect(HashMap::new, (a, b) -> a.put(b, (int)a.getOrDefault(b, 0)+1), (a, b) -> a.putAll(b))
+		.entrySet()
+		.stream()
+		.peek(x -> {
+			if ((int)x.getKey() == 0) zero[0] = x;
+		})
+		.forEach(x -> {
+			if ((int)x.getKey() != 0)System.out.printf("%d: <%d>\n", x.getKey(), x.getValue());
+		});
+		
+		System.out.printf("%d: <%d>\n", ((Entry) zero[0]).getKey(), ((Entry) zero[0]).getValue());
+		
+		
+//		Map<Integer, Integer> res = new Random()
+//				.ints(elements, minValue, maxValue)
+//				.flatMap(x -> String.valueOf(x).chars()) 
+//				.map(x -> Character.valueOf((char)(x-'0')))
+//				.collect(HashMap::new, (a, b) -> a.put(b, a.getOrDefault(b, 0) + 1), (a, b) -> a.putAll(b));
+//		printMapOfDigits(res);
 	}
 
 	private void printMapOfDigits(Map<Integer, Integer> res) {
