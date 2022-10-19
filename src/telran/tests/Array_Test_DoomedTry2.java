@@ -3,10 +3,13 @@ package telran.tests;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-public class Array_Test3 {
+public class Array_Test_DoomedTry2 {
 
 	@Test
 	void isOneSwapTestTrue1() {
@@ -60,7 +63,7 @@ public class Array_Test3 {
 		assertFalse(isOneSwapForSorted(ar9));
 	}
 
-	@Test
+//	@Test
 	void isOneSwapTestTrue() {
 		Integer[] ar91 = { 1, 2, 4, 3, 5 };// 2 3
 		Integer[] ar92 = { 1, 4, 3, 2, 5 };// 1 3
@@ -105,7 +108,7 @@ public class Array_Test3 {
 		}
 		int indexSecond = getTroublemakerIndex(array, indexFirst + 1);
 
-		return isOneSwapEnough(array, indexFirst, indexSecond + 1);
+		return checkPseudoSwap(array, indexFirst, indexSecond == -1 ? indexFirst + 1 : indexSecond + 1);
 	}
 
 	private static <T> int getTroublemakerIndex(T[] array, int startFrom) {
@@ -117,21 +120,121 @@ public class Array_Test3 {
 		return -1;
 	}
 
-	// first < second ---> true
+	private static <T> boolean checkPseudoSwap(T[] array, int indexFirst, int indexSecond) {
+		boolean res = true;
+
+		T nextElm = null;
+		T currElm = null;
+		T prevElm = null;
+
+		boolean reverceCheck = false;
+		boolean frontCheck = false;
+
+		for (int i = 0; i <= array.length - 1; i++) {
+
+			prevElm = null;
+			currElm = array[i];
+			nextElm = array[i + 1];
+
+			reverceCheck = false;
+			frontCheck = false;
+
+			if (i == indexFirst) {
+				if (indexFirst == 0) {
+					if (indexSecond != array.length - 1) {
+						reverceCheck = true;
+						frontCheck = true;
+						prevElm = array[indexSecond - 1];
+						nextElm = array[indexSecond + 1];
+					} else {
+						reverceCheck = true;
+						prevElm = array[indexSecond - 1];
+					}
+				}
+			} else if (i == indexFirst - 1) {
+				frontCheck = true;
+				nextElm = array[indexSecond];
+			} else if (i == indexFirst + 1) {
+				if (indexSecond != array.length -1) {
+					reverceCheck = true;
+					prevElm = array[indexSecond];
+				}
+			}
+			
+			if (i == indexSecond) {
+				if (indexSecond == array.length -1) {
+					if (indexFirst != 0) {
+						reverceCheck = true;
+						frontCheck = true;
+						prevElm = array[indexFirst - 1];
+						nextElm = array[indexFirst + 1];
+					} else {
+						frontCheck = true;
+						nextElm = array[indexFirst + 1];
+					}
+				}
+			} else if (i == indexSecond - 1) {
+				if (indexFirst != 0) {
+					reverceCheck = true;
+					frontCheck = true;
+					prevElm = array[indexFirst - 1];
+					nextElm = array[indexFirst + 1];
+				}
+				frontCheck = true;
+				nextElm = array[indexSecond];
+			} else if (i == indexFirst + 1) {
+				if (indexSecond != array.length -1) {
+					reverceCheck = true;
+					prevElm = array[indexSecond];
+				}
+			}
+
+			if (i == indexFirst) {
+				if (indexFirst == 0) {
+					frontCheck = true;
+					nextElm = indexFirst + 1 == indexSecond ? array[indexSecond + 1] : array[indexFirst + 1];
+				}
+			} else if (i == indexSecond) {
+				if (indexSecond == array.length - 1) {
+					reverceCheck = true;
+					prevElm = indexSecond - 1 == indexFirst ? array[indexFirst - 1] : array[indexSecond - 1];
+				}
+			}
+
+			if (i == indexFirst - 1) {
+				frontCheck = true;
+				nextElm = array[indexSecond];
+			} else if (i == indexSecond - 1 && indexSecond != 0) {
+				frontCheck = true;
+				nextElm = array[indexFirst];
+			}
+
+			if (i == indexFirst + 1) {
+				reverceCheck = true;
+				prevElm = array[indexSecond - 1];
+			} else if (i == indexSecond + 1 && indexSecond != 0) {
+				reverceCheck = true;
+				prevElm = array[indexFirst];
+			}
+
+			if (frontCheck) {
+				res = compareFirstAndSecond(currElm, nextElm);
+			}
+
+			if (reverceCheck) {
+				res = compareFirstAndSecond(prevElm, currElm);
+			}
+
+			if (!res) {
+				break;
+			}
+		}
+		return res;
+	}
+	
+//	 first < second ---> true
 	@SuppressWarnings("unchecked")
 	private static <T> boolean compareFirstAndSecond(T first, T second) {
 		return ((Comparable<T>) first).compareTo(second) <= 0;
-	}
-
-	private static <T> boolean isOneSwapEnough(T[] array, int indexFirst, int indexSecond) {
-		T[] arrayMutable = Arrays.copyOf(array, array.length);
-		if (indexSecond == 0) {
-			arrayMutable[indexFirst] = array[indexFirst + 1];
-			arrayMutable[indexFirst + 1] = array[indexFirst];
-		} else {
-			arrayMutable[indexFirst] = array[indexSecond];
-			arrayMutable[indexSecond] = array[indexFirst];
-		}
-		return getTroublemakerIndex(arrayMutable, 0) == -1;
 	}
 }

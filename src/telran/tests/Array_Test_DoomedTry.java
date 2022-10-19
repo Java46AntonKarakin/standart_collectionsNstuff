@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-public class Array_Test3 {
+public class Array_Test_DoomedTry {
 
 	@Test
 	void isOneSwapTestTrue1() {
@@ -60,16 +60,18 @@ public class Array_Test3 {
 		assertFalse(isOneSwapForSorted(ar9));
 	}
 
-	@Test
+//	@Test
 	void isOneSwapTestTrue() {
-		Integer[] ar91 = { 1, 2, 4, 3, 5 };// 2 3
-		Integer[] ar92 = { 1, 4, 3, 2, 5 };// 1 3
-		Integer[] ar93 = { 5, 2, 3, 4, 1 };// 0 4
-		Integer[] ar94 = { 2, 1, 3, 4, 5 };// 0 1
-		Integer[] ar95 = { 1, 2, 3, 5, 4 };// 3 4
-		Integer[] ar96 = { 4, 2, 3, 1, 5 };// 0 3
-		Integer[] ar97 = { 1, 5, 3, 4, 2 };// 1 4
-
+		Integer [] ar91 ={ 1, 2, 4, 3, 5 };// 	2   3	
+		Integer [] ar92 ={ 1, 4, 3, 2, 5 };//	1	3	
+		Integer [] ar93 ={ 5, 2, 3, 4, 1 };// 	0   4	
+		Integer [] ar94 ={ 2, 1, 3, 4, 5 };// 	0   1	
+		Integer [] ar95 ={ 1, 2, 3, 5, 4 };// 	3   4	
+		Integer [] ar96 ={ 4, 2, 3, 1, 5 };// 	0   3	
+		Integer [] ar97 ={ 1, 5, 3, 4, 2 };// 	1   4	
+		
+		
+		
 		Object source[][] = { { 1, 2, 4, 3, 5 }, { 10, 2, 3, 4, 1 }, { 1, 2, 4, 3, 5, 10 }, { 1, 5, 3, 4, 2, 10 },
 				{ 1, 5, 3, 4, 2, 10 }, { 1, 2, 3, 4, 10, 5 }, { 2, 1, -3, 4, 5, 10 }, { 1, 2, 4, 3, 5, 10 },
 				{ 1, 2, 3, 10, 5, 4 }, { 3, 2, 1, 4, 5, 6 }, { "lmn", "ab", "bc", "cd", "a" } };
@@ -77,7 +79,7 @@ public class Array_Test3 {
 		for (var ar : source) {
 			assertTrue(isOneSwapForSorted(ar));
 		}
-
+		
 		assertTrue(isOneSwapForSorted(ar91));
 		assertTrue(isOneSwapForSorted(ar92));
 		assertTrue(isOneSwapForSorted(ar93));
@@ -105,9 +107,9 @@ public class Array_Test3 {
 		}
 		int indexSecond = getTroublemakerIndex(array, indexFirst + 1);
 
-		return isOneSwapEnough(array, indexFirst, indexSecond + 1);
+		return checkPseudoSwap(array, indexFirst, indexSecond == -1 ? indexFirst + 1 : indexSecond + 1);
 	}
-
+	
 	private static <T> int getTroublemakerIndex(T[] array, int startFrom) {
 		for (; startFrom <= array.length - 2; startFrom++) {
 			if (!compareFirstAndSecond(array[startFrom], array[startFrom + 1])) {
@@ -117,21 +119,71 @@ public class Array_Test3 {
 		return -1;
 	}
 
+	private static <T> boolean checkPseudoSwap(T[] array, int indexFirst, int indexSecond) {
+		boolean res = true;
+
+		T nextElm = null;
+		T currElm = null;
+		T prevElm = null;
+
+		boolean reverceCheck = false;
+		boolean frontCheck = false;
+
+		for (int i = 0; i <= array.length - 2; i++) {
+
+			nextElm = array[i + 1];
+			currElm = array[i];
+			prevElm = null;
+
+			reverceCheck = false;
+			frontCheck = false;
+
+			if (i == indexFirst) {
+				if (indexFirst == 0) {
+					frontCheck = true;
+					nextElm = indexFirst + 1 == indexSecond ? array[indexSecond + 1] : array[indexFirst + 1];
+				}
+			} else if (i == indexSecond) {
+				if (indexSecond == array.length - 1) {
+					reverceCheck = true;
+					prevElm = indexSecond - 1 == indexFirst ? array[indexFirst - 1] : array[indexSecond - 1];
+				}
+			}
+			
+			if (i == indexFirst - 1) {
+				frontCheck = true;
+				nextElm = array[indexSecond];
+			} else if (i == indexSecond - 1 && indexSecond != 0) {
+				frontCheck = true;
+				nextElm = array[indexFirst];
+			}
+			
+			if (i == indexFirst + 1) {
+				reverceCheck = true;
+				prevElm = array[indexSecond-1];
+			} else if (i == indexSecond + 1 && indexSecond != 0) {
+				reverceCheck = true;
+				prevElm = array[indexFirst];
+			}
+
+			if (frontCheck) {
+				res = compareFirstAndSecond(currElm, nextElm);
+			}
+
+			if (reverceCheck) {
+				res = compareFirstAndSecond(prevElm, currElm);
+			}
+
+			if (!res) {
+				break;
+			}
+		}
+		return res;
+	}
+
 	// first < second ---> true
 	@SuppressWarnings("unchecked")
 	private static <T> boolean compareFirstAndSecond(T first, T second) {
 		return ((Comparable<T>) first).compareTo(second) <= 0;
-	}
-
-	private static <T> boolean isOneSwapEnough(T[] array, int indexFirst, int indexSecond) {
-		T[] arrayMutable = Arrays.copyOf(array, array.length);
-		if (indexSecond == 0) {
-			arrayMutable[indexFirst] = array[indexFirst + 1];
-			arrayMutable[indexFirst + 1] = array[indexFirst];
-		} else {
-			arrayMutable[indexFirst] = array[indexSecond];
-			arrayMutable[indexSecond] = array[indexFirst];
-		}
-		return getTroublemakerIndex(arrayMutable, 0) == -1;
 	}
 }
