@@ -33,6 +33,7 @@ public class CopyFilesInputOutputStreams {
 			System.out.printf("Destination <%s> has non-existed directory in the path", args[1]);
 		} catch (Exception e) {
 			System.out.println("Unknown error : " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -40,13 +41,13 @@ public class CopyFilesInputOutputStreams {
 			throws IOException {
 		
 		byte[] tmp = new byte[VOLUME_OF_BYTE_ARRAY];
-		int readableValue;
+		int readableValue = fis.read(tmp);
 		long totalBytesRead = 0;
 		
 		do {
-			readableValue = fis.read(tmp);
 			totalBytesRead += readableValue;
-			fos.write(tmp, 0, tmp.length);
+			fos.write(tmp, 0, readableValue);
+			readableValue = fis.read(tmp);
 		}
 		while (readableValue > 0);
 		

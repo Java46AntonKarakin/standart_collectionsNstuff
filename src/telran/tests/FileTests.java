@@ -15,6 +15,7 @@ class FileTests {
 	void setUp() {
 		file = new File("dir1/dir2");
 		file.delete();
+		new File("file1.txt").delete();
 	}
 
 	@Test
@@ -25,7 +26,7 @@ class FileTests {
 		assertTrue(file.exists());
 	}
 
-	@Test
+//	@Test
 	void printDirectoryContent() {
 		try {
 			printDirectory("..", 3, 1);
@@ -77,5 +78,24 @@ class FileTests {
 				return -1;
 			}
 		}).toList();
+	}
+	
+	@Test
+	void printStreamTest() throws Exception{
+		try(PrintStream ps = new PrintStream ("file1.txt");
+			BufferedReader reader = new BufferedReader(new FileReader ("file1.txt"));) {
+			ps.println("hello");
+			assertEquals("hello", reader.readLine());
+		} 
+	}
+	
+	@Test
+	void printWriterTest() throws Exception{
+		try(PrintWriter pw = new PrintWriter ("file1.txt");
+			BufferedReader reader = new BufferedReader(new FileReader ("file1.txt")); ) {
+			pw.println("hello");
+			pw.flush();
+			assertEquals("hello", reader.readLine());
+		}
 	}
 }
