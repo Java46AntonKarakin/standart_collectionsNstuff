@@ -5,11 +5,17 @@ import org.junit.jupiter.api.*;
 import telran.util.*;
 
 class SimpleStreamHandlerTest {
-	 static File logs = new File("logs.txt");
-	PrintStream prStrTest;
-	 static PrintStream prStrmLogging;
-	 static BufferedReader bufferedreader;
-	 Logger logger = getLogger();
+	static File logs = new File("logs.txt");
+	static PrintStream prStrmTest;
+	static PrintStream prStrmLogging;
+	static BufferedReader bufferedReader;
+	Logger logger = getLogger();
+	
+	String ERROR_EXSPRESSION = "error created";
+	String WARN_EXSPRESSION = "warn created";
+	String INFO_EXSPRESSION = "info created";
+	String DEBUG_EXSPRESSION = "debug created";
+	String TRACE_EXSPRESSION = "trace created";
 
 	@BeforeAll
 	static void beforeAll() {
@@ -21,19 +27,19 @@ class SimpleStreamHandlerTest {
 	}
 
 	@BeforeEach
-	void setUp() throws IOException {
+	void setUp() {
 		logs.delete();
 		prStrmLogging.append("* ".repeat(15));
 	}
-	
+
 	@AfterEach
 	void safeInterimResult() {
 		try {
-			bufferedreader = new BufferedReader(new FileReader(logs));
+			bufferedReader = new BufferedReader(new FileReader(logs));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		bufferedreader.lines().forEach(x -> prStrmLogging.append(String.format("%s\n", x)));
+		bufferedReader.lines().forEach(x -> prStrmLogging.append(String.format("%s\n", x)));
 		prStrmLogging.append("\n");
 	}
 
@@ -41,45 +47,46 @@ class SimpleStreamHandlerTest {
 	static void finish() {
 		try {
 			prStrmLogging.flush();
-			bufferedreader.close();
+			bufferedReader.close();
+			prStrmTest.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	void ErrorTest() {
 		prStrmLogging.append("ErrorTest: \n");
 		logger.setLevel(Logger.Level.ERROR);
-		callLoggerMethods(logger, "error created");
+		callLoggerMethods(logger, ERROR_EXSPRESSION);
 	}
 
 	@Test
 	void WarnTest() {
 		prStrmLogging.append("WarnTest: \n");
 		logger.setLevel(Logger.Level.WARN);
-		callLoggerMethods(logger, "warn created");
+		callLoggerMethods(logger, WARN_EXSPRESSION);
 	}
 
 	@Test
 	void InfoTest() {
 		prStrmLogging.append("InfoTest: \n");
 		logger.setLevel(Logger.Level.INFO);
-		callLoggerMethods(logger, "info created");
+		callLoggerMethods(logger, INFO_EXSPRESSION);
 	}
 
 	@Test
 	void DebugTest() {
 		prStrmLogging.append("DebugTest: \n");
 		logger.setLevel(Logger.Level.DEBUG);
-		callLoggerMethods(logger, "debug created");
+		callLoggerMethods(logger, DEBUG_EXSPRESSION);
 	}
 
 	@Test
 	void TraceTest() {
 		prStrmLogging.append("TraceTest: \n");
 		logger.setLevel(Logger.Level.TRACE);
-		callLoggerMethods(logger, "trace created");
+		callLoggerMethods(logger, TRACE_EXSPRESSION);
 	}
 
 	private void callLoggerMethods(Logger logger, String message) {
@@ -93,10 +100,10 @@ class SimpleStreamHandlerTest {
 	private Logger getLogger() {
 		try {
 			logs.createNewFile();
-			prStrTest = new PrintStream(logs);
+			prStrmTest = new PrintStream(logs);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return new Logger(new SimpleStreamHandler(prStrTest), "Logger created");
+		return new Logger(new SimpleStreamHandler(prStrmTest), "Logger created");
 	}
 }
